@@ -1,0 +1,243 @@
+<div class="row animated fadeIn" *ngIf="!cliente">
+
+    <div class="col-md-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy"> Lista de Clientes</h5>
+            </div>
+            <div class="ibox-content">
+
+                <div class="col-lg-4 col-md-offset-3 form-inline" *ngIf="_usuarioService.esRoot()">
+                    <label class="m-r-lg">Empresa  </label>
+                    <select id="selectEmpresa" class="select2 form-control">
+                            <option value="null" disabled>Seleccione la Empresa</option>
+                            <option *ngFor="let item of empresas" [value]="item.idEmpresa">
+                                                    {{item.descripcion}}
+                            </option>
+                        </select>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 form-inline">
+                        Buscar
+                        <input class="form-control ml-2" type="text" #input (keyup)="search(input.value)" />
+
+                        <div class="pull-right">
+                            Mostrar
+                            <select class="form-control ml-2 " style="width: auto" (change)="cambiarSize()" [(ngModel)]="limit">
+                                                            <option [ngValue]="5">5 items</option>
+                                                            <option [ngValue]="10">10 items</option>
+                                                            <option [ngValue]="20">20 items</option>
+                                                          </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-primary " (click)="agregar()"> <i class="fa fa-plus"></i> Agregar</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered " id="tabla">
+                        <thead class="thead-primary">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo Doc</th>
+                                <th>Documento</th>
+                                <th>Nombre y Apellido</th>
+                                <th>Sexo</th>
+                                <th>Direccion</th>
+                                <th>Telefono</th>
+                                <th>Correo</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="clientePage.content?.length> 0">
+                            <tr *ngFor="let item of clientePage.content; let i = index; ">
+                                <td>{{item.idCliente}}</td>
+                                <td>{{item.tipoDocumento.codTipoDoc}}</td>
+                                <td>{{item.nrodoc}}</td>
+                                <td>{{item.nombreApellido}}</td>
+                                <td *ngIf="item.sexo === 'M'">Masculino</td>
+                                <td *ngIf="item.sexo === 'F'">Femenino</td>
+                                <td>{{item.direccion}}</td>
+                                <td>{{item.telefono}}</td>
+                                <td>{{item.correo}}</td>
+                                <td *ngIf="!item.estado"> <span class="badge badge-danger"> Inactivo</span> </td>
+                                <td *ngIf="item.estado"><span class="badge badge-success"> Activo</span> </td>
+                                <td>
+                                    <button class="btn btn-warning btn-block" (click)="seleccionar(item)"> <i class="fa fa-edit"></i> Editar</button>
+                                    <button class="btn btn-info btn-block" (click)="seleccionar(item);  ver = true;"> <i class="fa fa-eye"></i> Ver</button>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                        <tbody *ngIf="clientePage.content?.length === 0">
+                            <tr>
+                                <td colspan="10" class="no-data-available text-center">No existen datos para mostrar</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                    <!--    <span *ngIf="clientePage.content?.length < clientePage.number * clientePage.size">
+                                Mostrando {{clientePage.content?.length}} registro(s) de {{clientePage.totalElements}}
+                            </span>
+                        <span *ngIf="clientePage.content?.length >= clientePage.number * clientePage.size">
+                                    Mostrando {{clientePage.number * clientePage.size }} registro(s) de {{clientePage.totalElements}}
+                                </span> -->
+
+                    <div class="view-options__legend">Mostrando
+                        <span>
+                                            {{(clientePage.size * clientePage.number + clientePage.numberOfElements)}}
+                                        </span> de {{clientePage.totalElements}} registros</div>
+
+                    <div class="col-md-12 m-3 text-center">
+                        <app-pagination [current]="clientePage.number + 1" [siblings]="2" [total]="clientePage.totalPages" (pageChange)="onPageChange($event)"></app-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row animated fadeIn" *ngIf="cliente">
+    <div class="col-lg-12">
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy" *ngIf="cliente.idCliente"> Editar cliente</h5>
+                <h5 class="text-navy" *ngIf="!cliente.idCliente"> Agregar cliente</h5>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                    <div class="row text-center m-b-md">
+                        <div class="col-md">
+                            <button type="submit" *ngIf="!ver" class="btn btn-w-m btn-outline btn-success"><i class="fa fa-check"></i> Grabar</button> &nbsp;
+                            <button type="button" *ngIf="!ver" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar(); ver = false;"> <i class="fa fa-refresh"></i> Cancelar</button>
+                            <button type="button" *ngIf="ver" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar(); ver = false;"> <i class="fa fa-arrow-left"></i> Volver</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label class="">ID Cliente</label>
+                                    <input type="text" placeholder="ID del cliente" class="form-control" disabled name="idCliente" [(ngModel)]="cliente.idCliente" />
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="">Estado *</label>
+                                    <label class="container">
+                                                    <span *ngIf="cliente.estado">ACTIVO</span><span *ngIf="!cliente.estado">INACTIVO</span>
+                                                    <input name="estado" [(ngModel)]="cliente.estado" type="checkbox" class=""> 
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-4">
+                                    <label>Tipo Documento *</label>
+                                    <select class="form-control" [disabled]="ver" data-placeholder="Seleccione el tipo Documento" id="selectTipoDoc">
+                                        <option value="CI"> CI</option>
+                                        <option value="RUC"> RUC</option>  
+                                        <option value="PAS"> PASAPORTE</option>           
+                                    </select>
+
+                                </div>
+                                <div class="col-lg-8">
+                                    <label class="">Numero de Documento * </label>
+                                    <input type="text" name="nrodoc" [disabled]="ver" (change)="verificarCliente()" [(ngModel)]="cliente.nrodoc" placeholder="Numero de Documento" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Nombre y Apellido * </label>
+                                    <input type="text" name="nombreApellido" [disabled]="ver" oninput="this.value = this.value.toUpperCase()" [(ngModel)]="cliente.nombreApellido" placeholder="Nombre y apellido del cliente" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-lg-6">
+                                    <label class="">Sexo * </label>
+                                    <select class="form-control" [disabled]="ver" data-placeholder="Seleccione el tipo Documento" id="selectSexo" required>
+                                            <option value="M"> Masculino</option>
+                                            <option value="F"> Femenino</option>  
+                                        </select>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label class="">Fecha nacimiento </label>
+                                    <input type="date" name="fechaNacimiento" [disabled]="ver" [(ngModel)]="cliente.fechaNacimiento" placeholder="dd/mm/aaaa" class="form-control" />
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Sucursal * </label>
+                                    <select class="select2 form-control" [disabled]="ver" required data-placeholder="Seleccione la sucursal" id="selectSucursal">
+                                            <option value="null" disabled>Seleccione la sucursal</option>
+         
+                                        <option *ngFor="let item of sucursales" [value]="item.idSucursal">
+                                                      {{item.descripcion}}
+                                                 </option>         
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6">
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Direccion </label>
+                                    <input type="text" name="direccion" [disabled]="ver" [(ngModel)]="cliente.direccion" placeholder="Direccion del cliente" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label class="">Telefono Principal </label>
+                                    <input type="text" name="telefono" [disabled]="ver" [(ngModel)]="cliente.telefono" placeholder="(xxx) xxx xxx" class="form-control" />
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="">Telefono Alternativo </label>
+                                    <input type="text" name="telefono1" [disabled]="ver" [(ngModel)]="cliente.telefono1" placeholder="(xxx) xxx xxx" class="form-control" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Correo Electronico </label>
+                                    <input type="email" name="correo" [disabled]="ver" [(ngModel)]="cliente.correo" placeholder="ejemplo@ejemplo.com" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <span class="text-success"> <strong>Observacion: </strong> Los campos con * son obligatorios</span>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,139 @@
+<div class="row">
+
+    <div class="col-md-5">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy"> Agregar/Modificar</h5>
+
+            </div>
+            <div class="ibox-content">
+
+                <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                    <div class="row text-center m-b-md">
+                        <div class="col-md">
+                            <button type="submit" class="btn btn-w-m btn-outline btn-success"><i class="fa fa-check"></i> Grabar</button> &nbsp;
+                            <button type="button" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar()"> <i class="fa fa-refresh"></i> Cancelar</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="">ID Marca</label>
+                            <input type="text" placeholder="ID del Marca" class="form-control" disabled name="idMarca" [(ngModel)]="marca.idMarca" />
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <label class="">Descripcion</label>
+
+                            <input type="text" name="descripcion" oninput="this.value = this.value.toUpperCase()" [(ngModel)]="marca.descripcion" placeholder="Descripcion del Marca" class="form-control" required />
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-md-7">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <h5 class="text-navy " style="margin-top: 5px!important;"> Lista de Marcas </h5>
+                    </div>
+                    <div class="col-lg-2" *ngIf="_usuarioService.esRoot()">
+                        <label class="m-r-lg">Empresa  </label>
+                    </div>
+                    <div class="col-lg-4" *ngIf="_usuarioService.esRoot()">
+                        <select id="selectEmpresa" class="select2 form-control">
+                               <option value="null" disabled>Seleccione la Empresa</option>
+                                 <option *ngFor="let item of empresas" [value]="item.idEmpresa">{{item.descripcion}}</option>
+                         </select>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="ibox-content">
+
+                <div class="row">
+                    <div class="col-lg-12 form-inline">
+                        Buscar
+                        <input class="form-control ml-2" type="text" #input (keyup)="search(input.value)" />
+
+                        <div class="pull-right justify-content-end">
+                            Mostrar
+                            <select class="form-control ml-2 " style="width: auto" [(ngModel)]="pageSize">
+                                                            <option [ngValue]="5">5 items</option>
+                                                            <option [ngValue]="10">10 items</option>
+                                                            <option [ngValue]="20">20 items</option>
+                                                          </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="table-responsive">
+                    <table class="table table-bordered " id="tabla">
+                        <thead class="thead-primary">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Descripción</th>
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="lista.length> 0">
+                            <tr *ngFor="let item of listaFiltrada | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index; " (click)="seleccionar(item)" [ngClass]="{'row-selected': marca.idMarca === item.idMarca}">
+                                <td>{{item.idMarca}}</td>
+                                <td>{{item.descripcion}}</td>
+
+                            </tr>
+
+                        </tbody>
+                        <tbody *ngIf="lista.length === 0">
+                            <tr>
+                                <td colspan="3" class="no-data-available text-center">No existen datos para mostrar</td>
+                            </tr>
+                        </tbody>
+
+                        <tbody *ngIf="listaFiltrada.length === 0 && lista.length > 0">
+                            <tr>
+                                <td colspan="5" class="no-data-available text-center">
+                                    <div class="alert alert-warning text-center" *ngIf="listaFiltrada.length === 0 && lista.length > 0">
+                                        <span> <i class="fa fa-info-circle"></i> No se encontro resultados</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tbody>
+                    </table>
+                    <span *ngIf="lista.length < page * pageSize">
+                        Mostrando {{listaFiltrada.length}} registro(s) de {{listaFiltrada.length}}
+                    </span>
+                    <span *ngIf="lista.length >= page * pageSize">
+                            Mostrando {{page * pageSize }} registro(s) de {{listaFiltrada.length}}
+                        </span>
+
+                    <div class="text-center">
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="false">
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,252 @@
+<div class="row animated fadeIn">
+    <div class="col-lg-12">
+
+        <div class="ibox float-e-margins">
+
+            <div class="ibox-title">
+                <h5 class="text-navy">Datos de la Compra </h5>
+            </div>
+
+            <div class="ibox-content">
+
+                <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                    <div class="row  m-b-md">
+
+                        <div class="col-lg-3">
+                            <label class="">Fecha Compra</label>
+                            <input type="date" name="fecha" [(ngModel)]="compra.fecha" placeholder="dd/mm/aaaa" class="form-control" />
+                        </div>
+                        <div class="text-center col-lg-6 m-t-md">
+                            <button type="submit" [disabled]="compra.detalles.length === 0" class="btn btn-w-m btn-outline btn-success"><i class="fa fa-check"></i> Grabar</button> &nbsp;
+                            <button type="button" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar();"> <i class="fa fa-refresh"></i> Cancelar</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-lg-6">
+
+
+                            <div class="form-group">
+                                <div class="col-lg-9">
+                                    <label class="">Proveedor * </label>
+                                    <select class="form-control select2" id="selectProveedor" required></select>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button type="button" [routerLink]="['/mant-proveedores']" class="btn btn-block m-t-md btn-primary"><i class="fa fa-plus"></i> </button> &nbsp;
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="col-lg-6">
+                                    <label class="">Timbrado * </label>
+                                    <input type="text" id="timbrado" name="timbrado" data-mask="99999999" [(ngModel)]="compra.proveedor.timbrado" placeholder="00000000" class="form-control" />
+
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label class="">Vencimiento de Timbrado </label>
+                                    <input type="date" id="vencTimbrado" name="vencTimbrado" [(ngModel)]="compra.proveedor.vencTimbrado" placeholder="dd/mm/aaaa" class="form-control" />
+                                </div>
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+                        <div class="col-lg-6">
+
+                            <div class="form-group m-b-md">
+                                <div class="col-lg-6">
+                                    <label class="m-b-md">Condicion de compra *</label>
+                                    <label class="radio-container col-lg-6">
+                                        <span>Contado</span>
+                                        <input name="condicion" [(ngModel)]="compra.condicion" value="CO" type="radio" class=""> 
+                                        <span class="radio-checkmark"></span>
+                                    </label>
+                                    <label class="radio-container col-lg-6">
+                                            <span>Credito</span>
+                                            <input name="condicion" [(ngModel)]="compra.condicion" type="radio" value="CR" class=""> 
+                                            <span class="radio-checkmark"></span>
+                                        </label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="m-b-md">Documento </label>
+                                    <div class="row">
+
+                                        <label class="radio-container col-lg-6">
+                                                <span>Factura</span>
+                                                <input name="tipo" [(ngModel)]="compra.tipo" type="radio" value="FA" class=""> 
+                                                <span class="radio-checkmark"></span>
+                                            </label>
+                                        <label class="radio-container col-lg-6">
+                                                    <span>Recibo</span>
+                                                    <input name="tipo" [(ngModel)]="compra.tipo" value="RE" type="radio" class=""> 
+                                                    <span class="radio-checkmark"></span>
+                                                </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-8">
+                                    <label class="">Comprobante </label>
+                                    <input type="text" data-mask="999-999-99999999" id="comprobante" name="comprobante" [(ngModel)]="compra.comprobante" placeholder="000-000-00000000" class="form-control" />
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Observaciones </label>
+                                    <input type="text" name="observaciones" [(ngModel)]="compra.observaciones" placeholder="Observaciones..." class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+
+            </div>
+
+            <div class="ibox-title">
+                <div class="row">
+
+                    <div class="col-lg-2">
+                        <h5 class="text-navy">Detalles de la Compra</h5>
+                    </div>
+
+                    <label class="radio-container col-lg-offset-1 col-lg-2">
+                                                    <span>Articulo</span>
+                                                    <input name="tipo" [(ngModel)]="tipo" (change)="cambiaTipo()" value="A" type="radio" class=""> 
+                                                    <span class="radio-checkmark"></span>
+                                                </label>
+                    <label class="radio-container col-lg-2">
+                                                        <span>Servicio</span>
+                                                        <input name="tipo" [(ngModel)]="tipo" (change)="cambiaTipo()" value="S" type="radio" class=""> 
+                                                        <span class="radio-checkmark"></span>
+                                                    </label>
+
+                    <div class="col-lg-2">
+                        <h3 class="pull-right"><strong>Total Gral.</strong> </h3>
+                    </div>
+                    <div class="col-lg-3">
+                        <h3 class="form-control total " style="margin-top: -5px;" disabled>{{compra.importe | number }}</h3>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="ibox-content">
+                <div class="row">
+                    <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="agregar( )">
+
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="col-lg-1">
+                                    <label class="">Cantidad </label>
+                                    <input type="number" name="cantidad" [(ngModel)]="detalle.cantidad" placeholder="0" class="form-control" />
+                                </div>
+                                <div class="col-lg-2" *ngIf="tipo === 'A'">
+                                    <label class="">Codigo Barra </label>
+                                    <input type="text" name="codigoBarra" disabled [(ngModel)]="articulo.codigoBarra" placeholder="0" class="form-control" />
+                                </div>
+                                <div class="col-lg-4" *ngIf="tipo === 'A';">
+                                    <label class="">Articulo </label>
+                                    <select class="select2 form-control" id="selectArticulo"></select>
+                                </div>
+                                <div class="col-lg-4" *ngIf="tipo === 'S'">
+                                    <label class="">Descripcion </label>
+
+                                    <input type="text" name="servicio" [(ngModel)]="servicio" oninput="this.value = this.value.toUpperCase()" placeholder="Descripcion del servicio" autofocus class="form-control" />
+
+                                </div>
+                                <div class="col-lg-2" *ngIf="tipo === 'S'">
+                                    <label class="">Tipo Impuesto </label>
+                                    <select class="form-control" data-placeholder="Seleccione el tipo de impuesto" id="selectImpuesto">
+                                            <option value="5">IVA 5%</option>
+                                            <option value="10" selected>IVA 10%</option> 
+                                            <option value="100">EXENTA</option>          
+                                        </select> </div>
+                                <div class="col-lg-2">
+                                    <label class="">Precio Unit </label>
+                                    <input type="text" (keyup)="numberWithCommas(detalle.precio)" name="precio" [(ngModel)]="detalle.precio" placeholder="0" class="form-control" />
+
+                                </div>
+                                <div class="col-lg-2">
+                                    <button type="submit" [disabled]="(!articulo.idArticulo && !servicio) || !detalle.cantidad || !detalle.precio" class="btn btn-block m-t-md btn-primary"><i class="fa fa-plus"></i> Agregar </button> &nbsp;
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered " id="tabla">
+                                <thead class="thead-primary">
+
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Cantidad</th>
+                                        <th>Descripcion</th>
+                                        <th>Precio Unit</th>
+                                        <th>Impuesto</th>
+                                        <th>Subtotal</th>
+                                        <th>Total</th>
+                                        <th>Acciones</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of compra.detalles; let i = index;">
+                                        <th>{{ i+1}}</th>
+                                        <th>{{item.cantidad | number}}</th>
+                                        <th>{{item.concepto}}</th>
+                                        <th>{{item.precio | number}}</th>
+                                        <th>{{item.ivaImporte | number:'1.0-0'}}</th>
+                                        <th>{{item.gravada | number}}</th>
+                                        <th>{{ (item.precio * item.cantidad | number)}}</th>
+                                        <th class="text-center">
+                                            <button class="btn btn-info m-r-xxs" (click)="editar(item)"> <i class="fa fa-edit"></i> </button>
+                                            <button class="btn btn-danger" (click)="borrar(item)"> <i class="fa fa-trash"></i> </button>
+                                        </th>
+                                    </tr>
+
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

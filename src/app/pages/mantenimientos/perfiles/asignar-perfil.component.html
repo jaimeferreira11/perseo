@@ -1,0 +1,132 @@
+<div class="row animate fadeIn">
+
+    <div class="col-lg-10 col-lg-offset-1">
+
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy">Asignacion a Usuario</h5>
+
+            </div>
+            <div class="ibox-content">
+
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                            <div class="form-group">
+                                <div class="col-lg-4">
+                                    <label class="">Empresa</label>
+                                    <select id="selectEmpresa" class="select2 form-control">
+                                            <option value="null" disabled>Seleccione la Empresa</option>
+                                            <option *ngFor="let item of empresas" [value]="item.idEmpresa">
+                                                    {{item.descripcion}}
+                                              </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <label class="">Buscar Usuario</label>
+                                    <select id="selectUsuario" class="select2 form-control" [disabled]="!empresa">
+                                                <option value="null" disabled>Seleccione al Usuario</option>
+                                                <option *ngFor="let item of usuarios" [value]="item.idUsuario">
+                                                        {{item.login}}
+                                                  </option>
+                                        </select>
+                                </div>
+                                <div class="col-lg-5" *ngIf="usuario.idUsuario">
+                                    <label class="">Usuario seleccionado</label>
+                                    <input type="text" disabled name="nombreApellido" [(ngModel)]="usuario.nombreApellido" placeholder="Nombre del usuario" class="form-control" required />
+
+                                </div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label class="">Perfil a Agregar</label>
+                                    <label for="">Id usuario{{usuario.idUsuario}}</label>
+                                    <select id="selectPerfil" class="select2 form-control" [disabled]=" !usuario.idUsuario">
+                                            <option value="null" disabled>Seleccione el Perfil</option>
+                                            <option *ngFor="let item of perfiles" [value]="item.idPerfil">
+                                                    {{item.descripcion}}
+                                              </option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+
+                                    <button type="button" (click)="grabar()" [disabled]="!usuario.idUsuario || !perfil" class="btn btn-w-m btn-outline btn-success m-t-md"><i class="fa fa-plus"></i> Agregar Perfil</button> &nbsp;
+
+                                </div>
+                            </div>
+
+
+
+                        </form>
+
+                    </div>
+                </div>
+
+
+                <div *ngIf="usuario.idUsuario" class="animate fadeIn">
+
+                    <div class="row ">
+
+                        <div class="ibox-title">
+                            <h5 class="text-navy">Lista de Perfiles actuales</h5>
+
+                        </div>
+                    </div>
+                    <div class="row animate fadeIn">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <div class="table-responsive ">
+                                <table class="table table-bordered ">
+                                    <thead class="thead-primary">
+
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Perfil</th>
+                                            <th>Borrar</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="usuario.perfiles.length > 0">
+                                        <tr *ngFor="let item of usuario.perfiles; let i = index; ">
+                                            <td style="width: 80px;">{{item.perfil.idPerfil}}</td>
+                                            <td>{{item.perfil.descripcion}}</td>
+                                            <td class="text-center" style="width: 100px;"> <button class="btn btn-danger" (click)="eliminar(item.perfil)"> <i class="fa fa-trash"></i> </button> </td>
+
+
+                                        </tr>
+
+                                    </tbody>
+                                    <tbody *ngIf="usuario.perfiles.length === 0">
+                                        <tr>
+                                            <td colspan="3" class="no-data-available text-center">No existen datos para mostrar</td>
+                                        </tr>
+                                    </tbody>
+
+
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+</div>

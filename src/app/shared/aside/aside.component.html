@@ -1,0 +1,66 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element"> <span>
+                        <img alt="image" class="img-circle img-responsive" width=48px; src="assets/img/no-img.jpg" />
+                             </span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear"> 
+                            <span class="block m-t-xs"> <strong class="font-bold">{{_usuarioService.usuario.login}}</strong>
+                             </span>
+                        <span class="block "> <strong>{{_usuarioService.usuario.nombreApellido}}</strong>
+                             </span>
+
+
+                        <span class="text-muted text-xs m-t-xs block">{{_usuarioService.usuario.perfilActual.descripcion}} <b class="caret"></b></span> </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="profile.html">Perfil</a></li>
+                        <li><a href="contacts.html">Notificaciones</a></li>
+                        <li><a href="mailbox.html">Mensajes</a></li>
+                        <li class="divider"></li>
+                        <li><a (click)="_usuarioService.logout()" routerLinkActive="router-link-active">Cerrar Sesion</a></li>
+                    </ul>
+
+
+                </div>
+                <div class="logo-element">
+                    PE
+                </div>
+            </li>
+            <li routerLinkActive="active">
+                <a [routerLink]="['/home']">
+                    <i class="fa fa-home"></i> <span class="nav-label">Inicio</span>
+                </a>
+
+            </li>
+
+            <!-- TIPO MENU -->
+            <li *ngFor="let menu of _usuarioService.usuario.menues">
+
+                <a *ngIf="menu.tipo === 'M'"> <i class="fa fa-bar-chart-o"></i> <span class="nav-label">{{menu.descripcion}}</span>
+                    <span class="label label-info pull-right">{{menu.submenues.length}}</span></a>
+
+                <ul *ngIf="menu.tipo === 'M'" class="nav nav-second-level collapse">
+                    <li *ngFor="let submenu of menu.submenues" routerLinkActive="active">
+                        <a [routerLink]="[submenu.clase.url]">{{submenu.descripcion}}</a>
+                    </li>
+
+                </ul>
+
+
+            </li>
+
+            <!-- TIPO PROGRAMA -->
+            <!-- <li>
+                <a href="metrics.html"><i class="fa fa-pie-chart"></i> <span class="nav-label">Metrics</span>  </a>
+            </li> -->
+
+            <li class="special_link">
+                <a href="www.ideasweb.com.py"><i class="fa fa-database"></i> <span class="nav-label">Ideas Web</span></a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

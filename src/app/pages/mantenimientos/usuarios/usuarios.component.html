@@ -1,0 +1,239 @@
+<div class="row animated fadeIn" *ngIf="!usuario">
+
+    <div class="col-md-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy"> Lista de Usuarios</h5>
+            </div>
+            <div class="ibox-content">
+
+                <div class="col-lg-4 col-md-offset-3 form-inline" *ngIf="_usuarioService.esRoot()">
+                    <label class="m-r-lg">Empresa  </label>
+                    <select id="selectEmpresa" class="select2 form-control">
+                        <option value="null" disabled>Seleccione la Empresa</option>
+                        <option *ngFor="let item of empresas" [value]="item.idEmpresa">
+                                                {{item.descripcion}}
+                        </option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 form-inline">
+                        Buscar
+                        <input class="form-control ml-2" type="text" #input (keyup)="search(input.value)" />
+
+                        <div class="pull-right">
+                            Mostrar
+                            <select class="form-control ml-2 " style="width: auto" [(ngModel)]="pageSize">
+                                                        <option [ngValue]="5">5 items</option>
+                                                        <option [ngValue]="10">10 items</option>
+                                                        <option [ngValue]="20">20 items</option>
+                                                      </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-primary " (click)="agregar()"> <i class="fa fa-plus"></i> Agregar</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered " id="tabla">
+                        <thead class="thead-primary">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Login</th>
+                                <th>Nombre y Apellido</th>
+                                <th>correo</th>
+                                <th>Sucursal</th>
+                                <th>Deposito</th>
+                                <th>Perfiles</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="lista.length> 0">
+                            <tr *ngFor="let item of listaFiltrada | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index; ">
+                                <td>{{item.idUsuario}}</td>
+                                <td>{{item.login}}</td>
+                                <td>{{item.nombreApellido}}</td>
+                                <td>{{item.correo}}</td>
+                                <td>{{item.sucursal?.descripcion}}</td>
+                                <td>{{item.deposito?.descripcion}}</td>
+                                <td>
+                                    <ul>
+                                        <li *ngFor="let perfil of item.perfiles">
+                                            {{perfil.perfil.descripcion}}
+                                        </li>
+                                    </ul>
+
+                                </td>
+                                <td *ngIf="!item.activo"> <span class="badge badge-danger"> Inactivo</span> </td>
+                                <td *ngIf="item.activo"><span class="badge badge-success"> Activo</span> </td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="seleccionar(item)"> <i class="fa fa-edit"></i> Editar</button>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                        <tbody *ngIf="lista.length === 0">
+                            <tr>
+                                <td colspan="3" class="no-data-available text-center">No existen datos para mostrar</td>
+                            </tr>
+                        </tbody>
+
+                        <tbody *ngIf="listaFiltrada.length === 0 && lista.length > 0">
+                            <tr>
+                                <td colspan="5" class="no-data-available text-center">
+                                    <div class="alert alert-warning text-center" *ngIf="listaFiltrada.length === 0 && lista.length > 0">
+                                        <span> <i class="fa fa-info-circle"></i> No se encontro resultados</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tbody>
+                    </table>
+                    <span *ngIf="lista.length < page * pageSize">
+                                        Mostrando {{listaFiltrada.length}} registro(s) de {{listaFiltrada.length}}
+                                    </span>
+                    <span *ngIf="lista.length >= page * pageSize">
+                                            Mostrando {{page * pageSize }} registro(s) de {{listaFiltrada.length}}
+                                        </span>
+
+                    <div class="text-center">
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="false">
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row animated fadeIn" *ngIf="usuario">
+    <div class="col-lg-12">
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy" *ngIf="usuario.idUsuario"> Editar usuario</h5>
+                <h5 class="text-navy" *ngIf="!usuario.idUsuario"> Agregar usuario</h5>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                    <div class="row text-center m-b-md">
+                        <div class="col-md">
+                            <button type="submit" class="btn btn-w-m btn-outline btn-success" [disabled]="!unico"><i class="fa fa-check"></i> Grabar</button> &nbsp;
+                            <button type="button" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar()"> <i class="fa fa-refresh"></i> Cancelar</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label class="">ID Usuario</label>
+                                    <input type="text" placeholder="ID del usuario" class="form-control" disabled name="idUsuario" [(ngModel)]="usuario.idUsuario" />
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="">Estado *</label>
+                                    <label class="container">
+                                            <span *ngIf="usuario.activo">ACTIVO</span><span *ngIf="!usuario.activo">INACTIVO</span>
+                                            <input name="estado" [(ngModel)]="usuario.activo" type="checkbox" class=""> 
+                                            <span class="checkmark"></span>
+                                        </label>
+                                </div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Login * </label> <span *ngIf="unico" class="text-success font-bold">  ( Ingresara con este usuario )</span> <span class="text-danger font-bold" *ngIf="!unico">  ( El usuario ya existe. Favor ingrese nuevamente )</span>
+                                    <input type="text" name="login" (change)="verificarUsername()" [(ngModel)]="usuario.login" placeholder="Login del usuario" class="form-control" required />
+                                </div>
+                            </div>
+                            <span class="text-danger text-center font-bold" *ngIf="clazz === 'error'">  Las contraseñas no coinciden</span>
+                            <div class="form-group">
+
+                                <div class="col-lg-6">
+                                    <label class="">Contraseña * </label>
+                                    <input type="password" name="password" [(ngModel)]="usuario.password" placeholder="Ingrese la contraseña del usuario" class="form-control {{clazz}}" required />
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="">Repita Contraseña * </label>
+                                    <input type="password" id="password2" placeholder="Vuelva a ingresar la contraseña del usuario" class="form-control {{clazz}}" required />
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Nombre y Apellido *</label>
+                                    <input type="text" name="nombreApellido" oninput="this.value = this.value.toUpperCase()" [(ngModel)]="usuario.nombreApellido" placeholder="Nombre del usuario" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Correo Electronico  </label>
+                                    <input type="email" name="correo" [(ngModel)]="usuario.correo" placeholder="ejemplo@gamil.com" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6">
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label>Sucursal * </label>
+                                    <select id="selectSucursal" class="select2 form-control" required>
+                                            <option value="null" disabled>Seleccione la Sucursal</option>
+                                            <option *ngFor="let item of sucursales" [value]="item.idSucursal">
+                                                 {{item.descripcion}}
+                                            </option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Deposito *</label>
+                                    <select [disabled]="!usuario.sucursal" id="selectDeposito" class="select2 form-control">
+                                            <option value="null" disabled>Seleccione el deposito</option>
+                                            <option *ngFor="let item of depositos" [value]="item.idDeposito">
+                                                {{item.descripcion}}
+                                            </option>
+                                        </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Perfiles </label>
+                                    <select id="selectPerfil" data-placeholder="Selecciones los perfiles" multiple class="select2 form-control" required>
+                                            <option *ngFor="let item of perfiles" [value]="item.idPerfil">
+                                                {{item.descripcion}}
+                                            </option>
+                                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

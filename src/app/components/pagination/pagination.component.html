@@ -1,0 +1,20 @@
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center align-items-center">
+        <li class="page-item" [class.disabled]="current <= 1">
+            <a class="page-link" aria-label="Previous" (click)="setPage(current - 1)">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item" *ngFor="let page of pages; trackBy: trackByFn" [class.active]="page === current">
+            <a class="page-link" (click)="setPage(page)">{{ page }}
+                    <span *ngIf="page === current" class="sr-only">(current)</span>
+            </a>
+        </li>
+
+        <li class="page-item" [class.disabled]="current >= total">
+            <a class="page-link" (click)="setPage(current + 1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

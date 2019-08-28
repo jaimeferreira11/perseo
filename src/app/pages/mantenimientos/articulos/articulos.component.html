@@ -1,0 +1,242 @@
+<div class="row animated fadeIn" *ngIf="!articulo">
+
+    <div class="col-md-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy"> Lista de Articulos</h5>
+            </div>
+            <div class="ibox-content">
+
+                <div class="col-lg-4 col-md-offset-3 form-inline" *ngIf="_usuarioService.esRoot()">
+                    <label class="m-r-lg">Empresa  </label>
+                    <select id="selectEmpresa" class="select2 form-control">
+                        <option value="null" disabled>Seleccione la Empresa</option>
+                        <option *ngFor="let item of empresas" [value]="item.idEmpresa">
+                                                {{item.descripcion}}
+                        </option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 form-inline">
+                        Buscar
+                        <input class="form-control ml-2" type="text" #input (keyup)="search(input.value)" />
+
+                        <div class="pull-right">
+                            Mostrar
+                            <select class="form-control ml-2 " style="width: auto" (change)="cambiarSize()" [(ngModel)]="limit">
+                                                        <option [ngValue]="5">5 items</option>
+                                                        <option [ngValue]="10">10 items</option>
+                                                        <option [ngValue]="20">20 items</option>
+                                                      </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-primary " (click)="agregar()"> <i class="fa fa-plus"></i> Agregar</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered " id="tabla">
+                        <thead class="thead-primary">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Descripcion</th>
+                                <th>Codigo Barra</th>
+                                <th>Familia</th>
+                                <th>Marca</th>
+                                <th>Unidad de Medida</th>
+                                <th>Linea Articulo</th>
+                                <th>Tipo Impuesto</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="articuloPage.content?.length> 0">
+                            <tr *ngFor="let item of articuloPage.content; let i = index; ">
+                                <td>{{item.idArticulo}}</td>
+                                <td>{{item.descripcion}}</td>
+                                <td>{{item.codigoBarra}}</td>
+                                <td>{{item.familia?.descripcion}}</td>
+                                <td>{{item.marca?.descripcion}}</td>
+                                <td>{{item.unidadMedida?.descripcion}}</td>
+                                <td>{{item.lineaArticulo?.descripcion}}</td>
+                                <td>{{item.tipoImpuesto?.descripcion}}</td>
+
+                                <td *ngIf="!item.estado"> <span class="badge badge-danger"> Inactivo</span> </td>
+                                <td *ngIf="item.estado"><span class="badge badge-success"> Activo</span> </td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="seleccionar(item)"> <i class="fa fa-edit"></i> Editar</button>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                        <tbody *ngIf="articuloPage.content?.length === 0">
+                            <tr>
+                                <td colspan="10" class="no-data-available text-center">No existen datos para mostrar</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                    <!--    <span *ngIf="articuloPage.content?.length < articuloPage.number * articuloPage.size">
+                            Mostrando {{articuloPage.content?.length}} registro(s) de {{articuloPage.totalElements}}
+                        </span>
+                    <span *ngIf="articuloPage.content?.length >= articuloPage.number * articuloPage.size">
+                                Mostrando {{articuloPage.number * articuloPage.size }} registro(s) de {{articuloPage.totalElements}}
+                            </span> -->
+
+                    <div class="view-options__legend">Mostrando
+                        <span>
+                                        {{(articuloPage.size * articuloPage.number + articuloPage.numberOfElements)}}
+                                    </span> de {{articuloPage.totalElements}} registros</div>
+
+                    <div class="col-md-12 m-3 text-center">
+                        <app-pagination [current]="articuloPage.number + 1" [siblings]="2" [total]="articuloPage.totalPages" (pageChange)="onPageChange($event)"></app-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row animated fadeIn" *ngIf="articulo">
+    <div class="col-lg-12">
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy" *ngIf="articulo.idArticulo"> Editar articulo</h5>
+                <h5 class="text-navy" *ngIf="!articulo.idArticulo"> Agregar artiuclo</h5>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                    <div class="row text-center m-b-md">
+                        <div class="col-md">
+                            <button type="submit" class="btn btn-w-m btn-outline btn-success"><i class="fa fa-check"></i> Grabar</button> &nbsp;
+                            <button type="button" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar()"> <i class="fa fa-refresh"></i> Cancelar</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label class="">ID Articulo</label>
+                                    <input type="text" placeholder="ID del articulo" class="form-control" disabled name="idArticulo" [(ngModel)]="articulo.idArticulo" />
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="">Estado *</label>
+                                    <label class="container">
+                                                <span *ngIf="articulo.estado">ACTIVO</span><span *ngIf="!articulo.estado">INACTIVO</span>
+                                                <input name="estado" [(ngModel)]="articulo.estado" type="checkbox" class=""> 
+                                                <span class="checkmark"></span>
+                                            </label>
+                                </div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Descripcion * </label>
+                                    <input type="text" name="descripcion" [(ngModel)]="articulo.descripcion" placeholder="Descripcion del articulo" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-lg-12">
+                                    <label class="">Codigo Barra * </label>
+                                    <input type="text" name="codigoBarra" [(ngModel)]="articulo.codigoBarra" placeholder="Codigo de barra del articulo" class="form-control" required />
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Tipo Impuesto * </label>
+                                    <select class="form-control" data-placeholder="Seleccione el tipo de impuesto" id="selectImpuesto">
+                                            <option value="5">IVA 5%</option>
+                                            <option value="10" selected>IVA 10%</option> 
+                                            <option value="100">EXENTA</option>          
+                                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6">
+
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label>Familia *</label>
+                                    <select class="select2 form-control" data-placeholder="Seleccione la familia" id="selectFamilia">
+                                            <option value="null" disabled>Seleccione la familia</option>
+         
+                                        <option *ngFor="let item of familias" [value]="item.idFamilia">
+                                                      {{item.descripcion}}
+                                                 </option>         
+                                             </select>
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="">Porcentaje de Ganancia (%)</label>
+                                    <input type="text" disabled [value]="familia?.porcentajeGanancia" placeholder="0.0" class="form-control w100" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Linea de Articulo *</label>
+                                    <select [disabled]="!familia" data-placeholder="Seleccione la linea de articulo" id="selectLinea" class="select2 form-control">
+                                            <option value="null" disabled>Seleccione la linea del articulo</option>        
+                                        <option *ngFor="let item of lineas" [value]="item.idLineaArticulo">
+                                                    {{item.descripcion}}
+                                                </option>
+                                            </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Unidad de Medida </label>
+                                    <select id="selectUnidad" data-placeholder="Selecciones la unidad" class="select2 form-control" required>
+                                            <option value="null" disabled>Seleccione la unidad de medida</option>          
+                                        <option *ngFor="let item of unidades" [value]="item.idUnidadMedida">
+                                                    {{item.descripcion}}
+                                                </option>
+                                            </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Marca </label>
+                                    <select id="selectMarca" data-placeholder="Selecciones la marca" class="select2 form-control" required>
+                                            <option value="null" disabled>Seleccione la marca</option>  
+                                        <option *ngFor="let item of marcas" [value]="item.idMarca">
+                                            {{item.descripcion}}
+                                         </option>
+                                     </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <span class="text-success"> <strong>Observacion: </strong> Los campos con * son obligatorios</span>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

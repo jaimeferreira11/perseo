@@ -1,0 +1,205 @@
+<div class="row animated fadeIn" *ngIf="!sucursal">
+
+    <div class="col-md-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy"> Lista de Sucursales</h5>
+            </div>
+            <div class="ibox-content">
+
+                <div class="row">
+                    <div class="col-lg-12 form-inline">
+                        Buscar
+                        <input class="form-control ml-2" type="text" #input (keyup)="search(input.value)" />
+
+                        <div class="pull-right justify-content-end">
+                            Mostrar
+                            <select class="form-control ml-2 " style="width: auto" [(ngModel)]="pageSize">
+                                                        <option [ngValue]="5">5 items</option>
+                                                        <option [ngValue]="10">10 items</option>
+                                                        <option [ngValue]="20">20 items</option>
+                                                      </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-primary " (click)="agregar()"> <i class="fa fa-plus"></i> Agregar</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered " id="tabla">
+                        <thead class="thead-primary">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Descripción</th>
+                                <th>Codigo</th>
+                                <th>Direccion</th>
+                                <th>Telefono</th>
+                                <th>ciudad</th>
+                                <th>matriz</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="lista.length> 0">
+                            <tr *ngFor="let item of listaFiltrada | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index; ">
+                                <td>{{item.idSucursal}}</td>
+                                <td>{{item.descripcion}}</td>
+                                <td>{{item.codigo}}</td>
+                                <td>{{item.direccion}}</td>
+                                <td>{{item.telefono1}}</td>
+                                <td>{{item.ciudad}}</td>
+                                <td *ngIf="!item.matriz"> <span class="badge badge-danger"> NO</span> </td>
+                                <td *ngIf="item.matriz"><span class="badge badge-success"> SI</span> </td>
+                                <td *ngIf="!item.estado"> <span class="badge badge-danger"> Inactivo</span> </td>
+                                <td *ngIf="item.estado"><span class="badge badge-success"> Activo</span> </td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="seleccionar(item)"> <i class="fa fa-edit"></i> Editar</button>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                        <tbody *ngIf="lista.length === 0">
+                            <tr>
+                                <td colspan="3" class="no-data-available text-center">No existen datos para mostrar</td>
+                            </tr>
+                        </tbody>
+
+                        <tbody *ngIf="listaFiltrada.length === 0 && lista.length > 0">
+                            <tr>
+                                <td colspan="5" class="no-data-available text-center">
+                                    <div class="alert alert-warning text-center" *ngIf="listaFiltrada.length === 0 && lista.length > 0">
+                                        <span> <i class="fa fa-info-circle"></i> No se encontro resultados</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tbody>
+                    </table>
+                    <span *ngIf="lista.length < page * pageSize">
+                                        Mostrando {{listaFiltrada.length}} registro(s) de {{listaFiltrada.length}}
+                                    </span>
+                    <span *ngIf="lista.length >= page * pageSize">
+                                            Mostrando {{page * pageSize }} registro(s) de {{listaFiltrada.length}}
+                                        </span>
+
+                    <div class="text-center">
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="false">
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row animated fadeIn" *ngIf="sucursal">
+    <div class="col-lg-12">
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy" *ngIf="sucursal.idSucursal"> Editar sucursal</h5>
+                <h5 class="text-navy" *ngIf="!sucursal.idSucursal"> Agregar sucursal</h5>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                    <div class="row text-center m-b-md">
+                        <div class="col-md">
+                            <button type="submit" class="btn btn-w-m btn-outline btn-success"><i class="fa fa-check"></i> Grabar</button> &nbsp;
+                            <button type="button" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar()"> <i class="fa fa-refresh"></i> Cancelar</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label class="">ID Sucursal</label>
+                                    <input type="text" placeholder="ID de la Sucursal" class="form-control" disabled name="idSucursal" [(ngModel)]="sucursal.idEmpresa" />
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="">Estado *</label>
+                                    <label class="container">
+                                            <span *ngIf="sucursal.estado">ACTIVO</span><span *ngIf="!sucursal.estado">INACTIVO</span>
+                                            <input name="estado" [(ngModel)]="sucursal.estado" type="checkbox" class=""> 
+                                            <span class="checkmark"></span>
+                                        </label>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Descripcion *</label>
+                                    <input type="text" name="descripcion" oninput="this.value = this.value.toUpperCase()" [(ngModel)]="sucursal.descripcion" placeholder="Descripcion de la sucursal" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Codigo  </label>
+                                    <input type="text" name="url" [(ngModel)]="sucursal.codigo" placeholder="Codigo de la sucursal" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Es la matriz? *</label>
+                                    <label class="container">
+                                                    <span *ngIf="sucursal.matriz">SI</span><span *ngIf="!sucursal.matriz">NO</span>
+                                                    <input name="matriz" [(ngModel)]="sucursal.matriz" type="checkbox" class=""> 
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-lg-6">
+
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Direccion</label>
+                                    <input type="text" name="direccion" [(ngModel)]="sucursal.direccion" placeholder="Direccion de la sucursal" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Telefono</label>
+                                    <input type="text" name="telefono1" [(ngModel)]="sucursal.telefono1" placeholder="Telefono de la sucursal" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="">Ciudad </label>
+                                    <input type="text" name="ciudad" [(ngModel)]="sucursal.ciudad" placeholder="Ciudad de la sucursal" class="form-control" required />
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

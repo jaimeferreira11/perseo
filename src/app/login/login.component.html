@@ -1,0 +1,61 @@
+<div class="loginColumns animated fadeInDown">
+    <div class="row">
+
+        <div class="col-md-6">
+            <h2 class="font-bold">¡Bienvenido!</h2>
+
+            <p>
+                <strong>Perseo</strong> es una herramienta de gestion empresarial que permite gestionar cada aspecto de su negocio de una manera integral, simple y desde el sitio en que se encuentre.
+            </p>
+
+            <p>
+                Sus datos estarán seguros en la nube y no necesitará instalar nada para operar el sistema y acceder a su información desde cualquier sitio y desde cualquier dispositivo.
+            </p>
+
+            <p>
+                Puede adoptar <strong>Perseo</strong> adquiriendo una licencia de uso perpetua o suscribirse a Perseo como un servicio en la nube abonando solo por el tiempo que lo usa y las características que emplea
+            </p>
+
+
+
+        </div>
+        <div class="col-md-6">
+            <div class="ibox-content">
+                <img src="assets/img/logo/perseo-logo.png" class="img-responsive center-block" width=240px; alt="Perseo" />
+                <form #f="ngForm" ngNativeValidate class="m-t" (ngSubmit)="ingresar( f )">
+                    <label class="text-danger mb-1" *ngIf="ban"> Credenciales invalidas</label>
+                    <div class="form-group">
+                        <input type="text" name="login" [ngModel]="login" class="form-control" placeholder="Usuario" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" [ngModel]="password" class="form-control" placeholder="Contraseña" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary block full-width m-b">Ingresar</button>
+
+                    <a href="#">
+                        <small>¿Olvidó su contraseña?</small>
+                    </a>
+
+
+                    <p class="text-muted text-center m-t-md">
+                        <small>¿No tienes un usuario?</small>
+                    </p>
+                    <a class="btn btn-sm btn-white btn-block" href="javascript.void(0)">Solicitar unirme</a>
+                </form>
+                <p class="m-t">
+                    <small> </small>
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6">
+            Copyright &copy;
+            <a href="www.ideasweb.com.py" target="_blank">  Ideas Web Paraguay </a>
+        </div>
+        <div class="col-md-6 text-right">
+            <small>© {{anio}}</small>
+        </div>
+    </div>
+</div>
