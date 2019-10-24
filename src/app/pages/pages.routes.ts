@@ -22,6 +22,7 @@ import { RegistrarOrdenComponent } from './compras/orden/registrar-orden.compone
 import { ConfirmarOrdenComponent } from './compras/orden/confirmar-orden.component';
 
 import { ProveedoresComponent } from './mantenimientos/proveedores/proveedores.component';
+import { RegistrarVentaComponent } from './ventas/registrar-venta.component';
 
 
 const pagesRoutes: Routes = [
@@ -35,6 +36,8 @@ const pagesRoutes: Routes = [
     { path: 'asignar-perfil-usuario', component: AsignarPerfilComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-empresas', component: EmpresasComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-usuarios', component: UsuariosComponent , canActivate: [SessionGuard, LoginGuard] },
+
+    // stock
     { path: 'mant-sucursales', component: SucursalesComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-depositos', component: DepositosComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-articulos', component: ArticulosComponent , canActivate: [SessionGuard, LoginGuard] },
@@ -42,14 +45,19 @@ const pagesRoutes: Routes = [
     { path: 'mant-marca', component: MarcaComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-linea-articulo', component: LineaArticuloComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-unidad-medida', component: UnidadMedidaComponent , canActivate: [SessionGuard, LoginGuard] },
+
+    // personas
     { path: 'mant-clientes', component: ClientesComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-proveedores', component: ProveedoresComponent , canActivate: [SessionGuard, LoginGuard] },
 
     // compra
     { path: 'registrar-compra', component: RegistroCompraComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'validar-compra', component: ValidarCompraComponent , canActivate: [SessionGuard, LoginGuard] },
-    { path: 'resgistrar-orden-pago', component: RegistrarOrdenComponent , canActivate: [SessionGuard, LoginGuard] },
-    { path: 'validar-orden-pago', component: ConfirmarOrdenComponent , canActivate: [SessionGuard, LoginGuard] },
+    { path: 'registrar-orden-pago', component: RegistrarOrdenComponent , canActivate: [SessionGuard, LoginGuard] },
+    { path: 'confirmar-orden-pago', component: ConfirmarOrdenComponent , canActivate: [SessionGuard, LoginGuard] },
+
+    // ventas
+    { path: 'registrar-venta', component: RegistrarVentaComponent , canActivate: [SessionGuard, LoginGuard] },
 
     { path: '', redirectTo: '/home', canActivate: [SessionGuard], pathMatch: 'full' }
 

@@ -17,6 +17,10 @@ export let options: Partial<IConfig> | (() => Partial<IConfig>);
 
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { LoaderComponent } from './loader/loader.component';
+import { DetalleCompraComponent } from '../components/detalle-compra/detalle-compra.component';
+import { FormaPagoComponent } from '../components/forma-pago/forma-pago.component';
+
+
 
 
 @NgModule({
@@ -36,7 +40,9 @@ import { LoaderComponent } from './loader/loader.component';
         BotonesComponent,
         ClockComponent,
         PaginationComponent,
-        LoaderComponent
+        LoaderComponent,
+        DetalleCompraComponent,
+        FormaPagoComponent
 
     ],
     exports: [
@@ -48,7 +54,9 @@ import { LoaderComponent } from './loader/loader.component';
         BotonesComponent,
         ClockComponent,
         PaginationComponent,
-        LoaderComponent
+        LoaderComponent,
+        DetalleCompraComponent,
+        FormaPagoComponent
     ]
 })
 

@@ -217,13 +217,15 @@ export class ClientesComponent implements OnInit {
 
     this._clienteService.getByDoc(this.cliente.nrodoc).subscribe((data: Cliente) => {
 
-      this.cliente = data;
-      setTimeout(() => {
-        $('.select2').select2();
-        $('#selectSucursal').val(this.cliente.sucursal.idSucursal).trigger('change');
-        $('#selectTipoDoc').val(this.cliente.tipoDocumento.codTipoDoc);
-        $('#selectSexo').val(this.cliente.sexo);
-      }, 100);
+      if(data.idCliente !== null){
+        this.cliente = data;
+        setTimeout(() => {
+          $('.select2').select2();
+          $('#selectSucursal').val(this.cliente.sucursal.idSucursal).trigger('change');
+          $('#selectTipoDoc').val(this.cliente.tipoDocumento.codTipoDoc);
+          $('#selectSexo').val(this.cliente.sexo);
+        }, 100);
+      }
 
     });
   }

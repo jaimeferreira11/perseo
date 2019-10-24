@@ -1,1 +1,162 @@
-<p>registrar-orden works!</p>
+<div class="row animated fadeIn">
+    <div class="col-lg-12">
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy">Filtros para búsqueda de compras</h5>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Rango de Fechas</label>
+                        <div class="col-lg-3">
+                            <input type="text" name="fecha" id="fecha" required placeholder="dd/mm/aaaa - dd/mm/aaaa" class="form-control" />
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label class="container">
+                                <span *ngIf="pendientes">Solo Pendientes</span><span *ngIf="!pendientes">Todos</span>
+                                <input name="pendientes" [(ngModel)]="pendientes" type="checkbox" class=""> 
+                                <span class="checkmark"></span>
+                             </label>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <button type="button" class="btn btn-w-m btn-outline btn-primary" (click)="obtenerCompras()" [disabled]="proveedoresSeleccionados.length === 0 ">
+                                <i class="fa fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Proveedor(es)</label>
+                        <div class="col-lg-5">
+                            <select class="form-control select2" multiple id="selectProveedor" required></select>
+                        </div>
+                        <label class="col-lg-1 control-label">Beneficiario*</label>
+                        <div class="col-lg-4">
+                            <input class="form-control" name="beneficiario" [(ngModel)]="orden.beneficiario" [disabled]="orden.beneficiario !== ''" required />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row animated fadeIn">
+    <div class="col-lg-12">
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy"> Datos de la Orden de pago</h5>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                    <div class="row text-center m-b-md">
+                        <div class="col-lg-5 col-lg-offset-2">
+                            <button type="submit" [disabled]="compraSeleccionados.length === 0" class="btn btn-w-m btn-outline btn-success"><i class="fa fa-check"></i> Generar Orden</button> &nbsp;
+                            <button type="button" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar()"> <i class="fa fa-refresh"></i> Cancelar</button>
+
+                        </div>
+
+                        <div class="col-lg-2">
+                            <h3 class="pull-right"><strong>Importe Total</strong> </h3>
+                        </div>
+                        <div class="col-lg-3">
+                            <h3 class="form-control total " style="margin-top: -5px;" disabled>{{orden.importe | number }}</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label class="">Concepto *</label>
+                                    <input type="text" name="concepto" oninput="this.value = this.value.toUpperCase()" [(ngModel)]="orden.concepto" placeholder="Ingrese el concepto" class="form-control" required />
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <label class="">Retener I.V.A ?</label>
+                                    <label class="container">
+                                                             <span *ngIf="orden.retencion">SI</span><span *ngIf="!orden.retenido">No</span>
+                                        <input name="retencion" (change)="retenerIva($event.target.checked)" [(ngModel)]="orden.retencion" type="checkbox" class=""> 
+                                        <span class="checkmark"></span>
+                                     </label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label class="">Importe Retenido</label>
+                                    <h3 class="form-control total " style="margin-top: -5px;" disabled>{{orden.importeRetenido | number }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive">
+
+                                <label class="m-b-xs" *ngIf="detalle.length > 0"> Resultado de la busqueda: {{detalle.length }} registros </label>
+                                <table class="table table-bordered ">
+                                    <thead class="thead-primary">
+
+                                        <tr>
+                                            <th class="text-center">
+                                                <!-- <input type="checkbox" id="checkAll">  --></th>
+                                            <th>Comprobante</th>
+                                            <th>Fecha</th>
+                                            <th>Proveedor</th>
+                                            <th>Total</th>
+                                            <th>A Pagar</th>
+                                            <th>Pagado</th>
+                                            <th>Usuario</th>
+                                            <th>Estado</th>
+                                            <th>Detalles</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla">
+                                        <tr *ngFor="let item of detalle">
+                                            <td> <input type="checkbox" [value]="item.idCompraCab" (change)="habilitarInput($event.target.checked, item)"> </td>
+                                            <td>{{item.comprobante}}</td>
+                                            <td>{{item.fecha | date: 'dd/MM/yyyy'}}</td>
+                                            <td>{{item.proveedor.nroDoc}} {{item.proveedor.descripcion}}</td>
+                                            <td class="bold">{{item.importe | number}}</td>
+                                            <td class="bold text-danger">
+                                                <input type="text" class="form-control" [id]="'aPagar'+item.idCompraCab" disabled name="aPagar" [value]="item.aPagar" (keyup)="cambiarMonto($event.target.value, item)">
+                                            </td>
+                                            <td class="bold text-navy">{{item.pagado | number}}</td>
+                                            <td>{{item.usuario?.login}}</td>
+                                            <td>{{item.estadoCompra.descripcion}}</td>
+                                            <td class="text-center">
+                                                <a data-toggle="modal" href="#modal_detalle_compra" (click)="modalDetalles= item.detalles;" class="btn btn-success"> <i class="fa fa-eye"> </i> </a>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<app-detalle-compra [detalles]="modalDetalles"></app-detalle-compra>

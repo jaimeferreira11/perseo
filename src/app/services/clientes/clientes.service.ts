@@ -57,6 +57,20 @@ export class ClientesService {
 
   }
 
+  getById(id: number) {
+
+    let url = environment.API + environment.ROOT + '/clientes/' + id;
+
+    return this.http.get( url )
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+
+
+  }
+
 
   save(cliente: Cliente) {
 

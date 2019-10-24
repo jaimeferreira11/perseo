@@ -45,10 +45,10 @@ import { DatePipe } from '@angular/common';
   declarations: [
     AppComponent,
     LoginComponent,
-    PagesComponent
+    PagesComponent,
     
     
-    
+
 
   ],
   imports: [

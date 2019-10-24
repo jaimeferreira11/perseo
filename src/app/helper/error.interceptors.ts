@@ -5,18 +5,19 @@ import { catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 
 import { UsuarioService } from '../services/services.index';
+import { LoadingService } from 'src/app/services/services.index';
 
 declare var alertify: any;
 
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private _usuarioService: UsuarioService) { }
+    constructor(private _usuarioService: UsuarioService, private _loadingService: LoadingService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
             console.log(err);
-
+            this._loadingService.stopLoading();
             if (err.status === 0 ) {
 
                 swal('No hay conexion con el servidor', 'Favor, intente en unos minutos', 'info');
@@ -50,7 +51,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
             if (err.status === 403 ) {
 
-                swal(err.error.error_description, 'No tienes permiso para acceder ' , 'info');
+                swal(err.error.message, 'No se concedio permiso ' , 'info');
                 return throwError(err);
 
             }

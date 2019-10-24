@@ -68,4 +68,21 @@ export class ArticulosService {
       }));
   }
 
+
+  // ARTICULO DEPOSITO
+
+  getAriculoDepositoById(id: number) {
+
+    let url = environment.API + environment.ROOT + '/articulos/articulo-deposito/' + id;
+
+    return this.http.get( url )
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+
+
+  }
+
 }

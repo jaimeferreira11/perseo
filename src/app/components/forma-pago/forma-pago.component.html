@@ -1,0 +1,235 @@
+<div class="modal fade modal-ext" id="modal_forma_pago" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" tabindex="-1" data-refresh="true" data-backdrop="static" data-keyboard="false" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <div class="modal-dialog" role="document" style="width: 60% !important;">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+
+                <h4 class="modal-title" id="myModalLabel">Forma de Pago</h4>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <div class="box-body">
+                    <div class="row">
+
+                        <div class="col-lg-6">
+
+                            <div class="form-group">
+                                <div class="col-lg-8">
+                                    <h3 class=""><strong>Total a Pagar</strong> </h3>
+                                    <h3 class="form-control total " style="margin-top: -5px;" disabled>{{total | number}} </h3>
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="col-lg-8">
+                                    <h3 class=""><strong>Vuelto</strong> </h3>
+                                    <h3 class="form-control total " style="margin-top: -5px;" disabled>{{vuelto | number}} </h3>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="row" *ngIf="tipo === 'pago'">
+
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="col-lg-4">
+                                    <label class="">Cuenta *</label>
+                                    <select (change)="cambiar($event.target.value)" name="idCajaCuenta" placeholder="Seleccione" class="form-control">
+                                        <option *ngFor="let item of cuentas" [value]="item.idCajaCuenta">
+                                             {{item.descripcion}}
+                                         </option>
+                                           
+                                    </select>
+
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <label class="">Monto</label>
+                                    <input type="text" (keyup)="numberWithCommas()" [disabled]="vuelto > 0" name="importe" [(ngModel)]="forma.importe" placeholder="0" class="form-control" />
+
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <label class="">Saldo</label>
+                                    <h3 class="form-control total " style="font-size: 18px;" disabled>{{saldo | number }}</h3>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-primary m-t-md" [ngClass]="{'disabled': forma.cajaCuenta.tipo !== 'E' && !forma.transaccion}" [disabled]="!forma.importe" (click)="agregar()"> <i class="fa fa-plus"></i> Agregar</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-4" *ngIf="forma.cajaCuenta.tipo === 'C' && forma.cajaCuenta.tipo">
+                                    <label class="">Banco </label>
+                                    <select id="selectBanco" class="form-control" name="idBanco" [(ngModel)]="forma.cajaCuenta.banco.idBanco">
+                                            <option *ngFor="let item of bancos" [value]="item.idBanco">
+                                                    {{item.descripcion}}
+                                             </option>                                               
+                                        </select>
+
+                                </div>
+
+                                <div class="col-lg-6" *ngIf="forma.cajaCuenta.tipo !== 'E' && forma.cajaCuenta.tipo">
+                                    <label class="">Cheque/Boleta/Nro Transferencia</label>
+                                    <input type="text" name="transaccion" oninput="this.value = this.value.toUpperCase()" name="transaccion" [(ngModel)]="forma.transaccion" placeholder="Ingrese la transaccion" class="form-control" />
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="tipo === 'cobro'">
+
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="col-lg-4">
+                                    <label class="">Cuenta *</label>
+                                    <select (change)="cambiar($event.target.value)" name="idCajaCuenta" placeholder="Seleccione" class="form-control">
+                                        <option *ngFor="let item of cuentas" [value]="item.idCajaCuenta">
+                                             {{item.descripcion}}
+                                         </option>
+                                           
+                                    </select>
+
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <label class="">Monto</label>
+                                    <input type="text" (keyup)="numberWithCommas()" [disabled]="vuelto > 0" name="importe" [(ngModel)]="formaCobro.importe" placeholder="0" class="form-control" />
+
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <label class="">Saldo</label>
+                                    <h3 class="form-control total " style="font-size: 18px;" disabled>{{saldo | number }}</h3>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-primary m-t-md" [ngClass]="{'disabled': formaCobro.cajaCuenta.tipo !== 'E' && !formaCobro.referencia}" [disabled]="!formaCobro.importe" (click)="agregar()"> <i class="fa fa-plus"></i> Agregar</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-4" *ngIf="formaCobro.cajaCuenta.tipo === 'C' && formaCobro.cajaCuenta.tipo">
+                                    <label class="">Banco </label>
+                                    <select id="selectBanco" class="form-control" name="idBanco" [(ngModel)]="formaCobro.cajaCuenta.banco.idBanco">
+                                            <option *ngFor="let item of bancos" [value]="item.idBanco">
+                                                    {{item.descripcion}}
+                                             </option>                                               
+                                        </select>
+
+                                </div>
+
+                                <div class="col-lg-6" *ngIf="formaCobro.cajaCuenta.tipo !== 'E' && formaCobro.cajaCuenta.tipo">
+                                    <label class="">Cheque/Boleta/Nro Transferencia</label>
+                                    <input type="text" name="referencia" oninput="this.value = this.value.toUpperCase()" [(ngModel)]="formaCobro.referencia" placeholder="Ingrese la referencia" class="form-control" />
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" *ngIf="tipo === 'pago'">
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered ">
+                                <thead class="thead-primary">
+
+                                    <tr>
+                                        <th class="text-center">Item</th>
+                                        <th>Cuenta</th>
+                                        <th>Importe</th>
+                                        <th>Cheque</th>
+                                        <th class="text-center">Eliminar</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of formas; let i = index;">
+                                        <td>{{ i +1}}</td>
+                                        <td>{{item.cajaCuenta.descripcion}}</td>
+                                        <td>{{item.importe | number}}</td>
+                                        <td>{{item.transaccion}}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-danger" (click)="borrar(item)">  <i class="fa fa-trash"></i> </button>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="tipo === 'cobro'">
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered ">
+                                <thead class="thead-primary">
+
+                                    <tr>
+                                        <th class="text-center">Item</th>
+                                        <th>Cuenta</th>
+                                        <th>Importe</th>
+                                        <th>Referencia</th>
+                                        <th class="text-center">Eliminar</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of formasCobros; let i = index;">
+                                        <td>{{ i +1}}</td>
+                                        <td>{{item.cajaCuenta.descripcion}}</td>
+                                        <td>{{item.importe | number}}</td>
+                                        <td>{{item.referencia}}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-danger" (click)="borrar(item)">  <i class="fa fa-trash"></i> </button>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-1">
+
+
+                        &nbsp;
+                        <button type="button" class="btn btn-outline btn-danger" id="add_cancelar" data-dismiss="modal">
+                            <i class="fa fa-window-close-o"></i> Cerrar
+                        </button>
+                        <button type="button" class="btn btn-outline btn-success" (click)="procesar()">
+                                <i class="fa fa-check"></i> Aceptar
+                            </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
