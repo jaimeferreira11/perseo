@@ -22,6 +22,7 @@
         "@ng-bootstrap/ng-bootstrap": "^5.1.0",
         "alertifyjs": "^1.11.4",
         "angular-bootstrap-checkbox": "^0.5.0",
+        "angular-daterangepicker": "^0.2.3-alpha1",
         "angular2-text-mask": "^9.0.0",
         "jquery": "^3.1.1",
         "metismenu": "^3.0.4",

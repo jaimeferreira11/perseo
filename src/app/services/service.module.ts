@@ -5,7 +5,8 @@ import {
    UsuarioService, LoginGuard, SessionGuard, MenuService, PerfilService, ProgramaService,
    EmpresaService, DepositoService, SucursalService, ClockService, ArticulosService,
    FamiliaService, MarcaService, LineaArticuloService, UnidadMedidaService,
-   ClientesService, ProveedoresService, CompraService, LoadingService
+   ClientesService, ProveedoresService, CompraService, LoadingService, CajaService, BancoService,
+   VentasService
    } from './services.index';
 
 
@@ -34,7 +35,10 @@ import {
         ClientesService,
         ProveedoresService,
         CompraService,
-        LoadingService
+        LoadingService,
+        CajaService,
+        BancoService,
+        VentasService
      ],
 
   })

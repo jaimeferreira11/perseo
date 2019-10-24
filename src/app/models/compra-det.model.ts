@@ -8,7 +8,7 @@ export class CompraDet {
         public idCompraDet?: number,
         public concepto?: string,
         public cantidad?: number,
-        public precio?: any,
+        public precio?: number | any,
         public gravada?: number,
         public exenta?: number,
         public ivaPorcentaje?: number,

@@ -1,0 +1,94 @@
+<div class="modal fade modal-ext" id="modal_detalle_compra" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" tabindex="-1" data-refresh="true" data-backdrop="static" data-keyboard="false" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <div class="modal-dialog" role="document" style="width: 60% !important;">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+
+                <h4 class="modal-title" id="myModalLabel">Detalle de Compra</h4>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive" *ngIf="detalles.length > 0">
+                                <table class="table table-bordered" id="tablaDetalleCompra">
+                                    <thead>
+                                        <tr>
+                                            <th>Concepto</th>
+                                            <th>Precio Unit</th>
+                                            <th>Cantidad</th>
+                                            <th>Exenta</th>
+                                            <th>Gravada</th>
+                                            <th>IVA Importe</th>
+                                            <th>IVA %</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of detalles">
+                                            <td>{{item.concepto}}</td>
+                                            <td>{{item.precio | number}}</td>
+                                            <td>{{item.cantidad| number}}</td>
+                                            <td>{{item.exenta | number:'1.0-0'}}</td>
+                                            <th>{{item.gravada | number:'1.0-0'}}</th>
+                                            <td>{{item.ivaImporte | number:'1.0-0'}}</td>
+                                            <td>{{item.ivaPorcentaje}} %</td>
+                                            <td class="bold">{{(item.precio * item.cantidad) | number}}</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="table-responsive" *ngIf="compras.length > 0">
+                                <table class="table table-bordered" id="tablaDetalleCompra">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Comprobante</th>
+                                            <th>Proveedor</th>
+                                            <th>Usuario</th>
+                                            <th>Pagado</th>
+                                            <th>Importe</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of compras">
+                                            <td>{{item.compraCab.fecha | date: 'dd/MM/yyyy'}}</td>
+                                            <td>{{item.compraCab.comprobante | number}}</td>
+                                            <td>{{item.compraCab.proveedor.nroDoc}} {{item.compraCab.proveedor.descripcion}}</td>
+                                            <td>{{item.compraCab.usuario?.login}}</td>
+                                            <td class="bold">{{item.compraCab.pagado | number}}</td>
+                                            <td class="bold">{{item.importe | number}}</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-1">
+
+
+                        &nbsp;
+                        <button type="button" class="btn btn-outline btn-danger" id="add_cancelar" data-dismiss="modal">
+                            <i class="fa fa-window-close-o"></i> Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--/.Content-->
+    </div>
+</div>

@@ -9,7 +9,7 @@ export class ArticuloDeposito {
     constructor (
         public idArticuloDeposito?: number,
         public estado?: boolean,
-        public articulo?: Articulo,
+        public articulo: Articulo = new Articulo(),
         public cantidad?: number,
         public cantidadMinima?: number,
         public cantidadBloqueo?: number,

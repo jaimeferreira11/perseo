@@ -4,12 +4,10 @@ import { ProveedoresService, UsuarioService, ArticulosService, CompraService, Lo
 import { environment } from 'src/environments/environment';
 import { CompraDet } from 'src/app/models/compra-det.model';
 import { Articulo } from '../../models/articulo.model';
-import * as moment from 'moment';
-import { DatePipe } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { ArticuloDeposito } from '../../models/articulo-deposito.model';
 import { Subscription } from 'rxjs';
-import { element } from 'protractor';
+import { DatePipe } from '@angular/common';
 
 declare var $: any;
 declare var swal: any;
@@ -29,13 +27,13 @@ export class RegistroCompraComponent implements OnInit {
   articulos: Articulo[] = [];
   servicio: string;
 
-  loadingSubscription: Subscription;
+  // loadingSubscription: Subscription;
 
 
   constructor(public _proveedorService: ProveedoresService,
     private loadingScreenService: LoadingService,
-    private datePipe: DatePipe,
     public _compraService: CompraService,
+    public datePipe: DatePipe,
     public _articuloService: ArticulosService,
     public _usuarioService: UsuarioService) { }
 

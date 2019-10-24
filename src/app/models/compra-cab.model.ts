@@ -5,6 +5,7 @@ import { Sucursal } from './sucursal.model';
 import { EstadoCompra } from './estado-compra.model';
 import { Turno } from './turno.model';
 import { CompraDet } from './compra-det.model';
+import { Usuario } from './usuario.model';
 
 export class CompraCab {
 
@@ -30,7 +31,9 @@ export class CompraCab {
         public observaciones?: string,
         public turno?: Turno,
         public empresa?: Empresa,
+        public usuario?: Usuario,
         public detalles: CompraDet[] = [],
+        public aPagar?: number | any
     ) { }
 
 }
