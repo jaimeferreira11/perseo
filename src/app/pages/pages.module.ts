@@ -30,6 +30,7 @@ import { ValidarCompraComponent } from './compras/validar-compra.component';
 import { RegistrarOrdenComponent } from './compras/orden/registrar-orden.component';
 import { ConfirmarOrdenComponent } from './compras/orden/confirmar-orden.component';
 import { RegistrarVentaComponent } from './ventas/registrar-venta.component';
+import { CobrarFacturaComponent } from './ventas/cobrar-factura.component';
 
 
 
@@ -55,7 +56,8 @@ import { RegistrarVentaComponent } from './ventas/registrar-venta.component';
         ValidarCompraComponent,
         RegistrarOrdenComponent,
         ConfirmarOrdenComponent,
-        RegistrarVentaComponent
+        RegistrarVentaComponent,
+        CobrarFacturaComponent
     ],
     exports: [
        HomeComponent

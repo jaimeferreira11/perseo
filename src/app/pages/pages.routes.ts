@@ -23,6 +23,7 @@ import { ConfirmarOrdenComponent } from './compras/orden/confirmar-orden.compone
 
 import { ProveedoresComponent } from './mantenimientos/proveedores/proveedores.component';
 import { RegistrarVentaComponent } from './ventas/registrar-venta.component';
+import { CobrarFacturaComponent } from './ventas/cobrar-factura.component';
 
 
 const pagesRoutes: Routes = [
@@ -58,6 +59,7 @@ const pagesRoutes: Routes = [
 
     // ventas
     { path: 'registrar-venta', component: RegistrarVentaComponent , canActivate: [SessionGuard, LoginGuard] },
+    { path: 'cobrar-factura', component: CobrarFacturaComponent , canActivate: [SessionGuard, LoginGuard] },
 
     { path: '', redirectTo: '/home', canActivate: [SessionGuard], pathMatch: 'full' }
 

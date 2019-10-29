@@ -5,6 +5,7 @@ import { Caja } from 'src/app/models/caja.model';
 import { CajaCuenta } from 'src/app/models/caja-cuenta.model';
 import { OrdenPagoFp } from 'src/app/models/orden-pago-fp.model';
 import { FacturaFormaCobro } from '../../models/factura-forma-cobro.model';
+import { ReciboFormaCobro } from 'src/app/models/recibo-forma-cobro.model';
 
 declare var $: any;
 declare var swal: any;
@@ -21,6 +22,7 @@ export class FormaPagoComponent implements OnInit {
   @Input('tipo')  tipo: string = 'pago';
   @Output() enviarFormas: EventEmitter<OrdenPagoFp[]> = new EventEmitter();
   @Output() enviarFormaCobro: EventEmitter<FacturaFormaCobro[]> = new EventEmitter();
+  @Output() enviarReciboFormaCobro: EventEmitter<ReciboFormaCobro[]> = new EventEmitter();
 
   vuelto: number = 0;
 
@@ -35,6 +37,7 @@ export class FormaPagoComponent implements OnInit {
   // cobro
   formaCobro:  FacturaFormaCobro = new FacturaFormaCobro();
   formasCobros: FacturaFormaCobro[] = [];
+
 
   constructor( public _cajaService: CajaService,
     public _usuarioService: UsuarioService,
@@ -91,7 +94,7 @@ export class FormaPagoComponent implements OnInit {
       this.saldo = this.saldo - item.importe;
       this.forma.importe = null;
       this.forma.transaccion = '';
-    } else if ( this.tipo === 'cobro') {
+    } else  {
       let item = Object.assign({}, this.formaCobro);
       item.importe = this.formaCobro.importe.toString().replace(/[,]/g, '');
       this.formasCobros.push(item);
@@ -120,13 +123,13 @@ export class FormaPagoComponent implements OnInit {
           suma += Number(f.importe);
       });
 
-    } else if( this.tipo === 'cobro') {
+    } else {
 
       this.formasCobros = this.formasCobros.filter(obj => obj != item);
        this.formasCobros.forEach(f => {
           suma += Number(f.importe);
       });
-    }
+    } 
 
     console.log(suma);
 
@@ -143,9 +146,25 @@ export class FormaPagoComponent implements OnInit {
   procesar() {
 
     if ( this.tipo === 'pago') {
+      console.log('Procesando pago');
+      
       this.enviarFormas.emit( this.formas );
-    } else {
+    } else if ( this.tipo === 'cobro') {
+      console.log('Procesando cobro contado');
+      
       this.enviarFormaCobro.emit(this.formasCobros);
+    } else if ( this.tipo === 'recibo') {
+      console.log('Procesando cobro credito');
+      let recibosFormas: ReciboFormaCobro[] = [] ;
+      this.formasCobros.forEach(f => {
+        let r = new ReciboFormaCobro();
+        r.importe = f.importe;
+        r.referencia = f.referencia;
+        r.cajaCuenta = f.cajaCuenta;
+        recibosFormas.push(r);
+
+      });
+      this.enviarReciboFormaCobro.emit(recibosFormas);
     }
     $('#modal_forma_pago').modal('toggle');
   }
