@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { VentaCab } from 'src/app/models/venta-cab.model';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
+import { ReciboCab } from '../../models/recibo-cab.model';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +75,46 @@ export class VentasService {
           console.log(resp);
           return resp;
       }));
-    }
+  }
+
+  // Factura
+
+  getPendientesByCliente(idCliente: number) {
+
+    // tslint:disable-next-line: max-line-length
+    let url = `${environment.API}${environment.ROOT}/facturas/cliente/pendientes/${idCliente}`;
+
+    return this.http.get( url)
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+  }
+
+  getFacturasByCliente(idCliente: number, all: boolean, estado: boolean, allTipos: boolean, idTipo: number) {
+
+    // tslint:disable-next-line: max-line-length
+    let url = `${environment.API}${environment.ROOT}/facturas/cliente/${idCliente}/${all}/${estado}/${allTipos}/${idTipo}`;
+
+    return this.http.get( url)
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+  }
+
+  cobrarFactura(recibo: ReciboCab ) {
+
+    let url = environment.API + environment.ROOT + '/facturas/cobrar';
+
+    return this.http.post( url , recibo)
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+  }
 
 }

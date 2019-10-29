@@ -9,9 +9,11 @@ import { TipoImpuesto } from '../../models/tipo-impuesto.model';
 import { NgForm } from '@angular/forms';
 import { Cliente } from '../../models/cliente.model';
 import { ArticuloDeposito } from '../../models/articulo-deposito.model';
+import * as printJS from 'print-js';
 
 declare var $: any;
 declare var swal: any;
+
 
 @Component({
   selector: 'app-registrar-venta',
@@ -39,6 +41,9 @@ export class RegistrarVentaComponent implements OnInit {
 
   ngOnInit() {
 
+
+   // printJS('http://localhost:8080/public2/document/facturas/fact1559931997127.pdf');
+  //  printJS({printable: 'http://localhost:8080/public2/document/facturas/fact1559931997127.pdf', type:'pdf', showModal:true})
     
   }
 

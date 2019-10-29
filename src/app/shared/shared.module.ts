@@ -19,6 +19,7 @@ import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { LoaderComponent } from './loader/loader.component';
 import { DetalleCompraComponent } from '../components/detalle-compra/detalle-compra.component';
 import { FormaPagoComponent } from '../components/forma-pago/forma-pago.component';
+import { DetalleVentaComponent } from '../components/detalle-venta/detalle-venta.component';
 
 
 
@@ -42,7 +43,8 @@ import { FormaPagoComponent } from '../components/forma-pago/forma-pago.componen
         PaginationComponent,
         LoaderComponent,
         DetalleCompraComponent,
-        FormaPagoComponent
+        FormaPagoComponent,
+        DetalleVentaComponent
 
     ],
     exports: [
@@ -56,7 +58,8 @@ import { FormaPagoComponent } from '../components/forma-pago/forma-pago.componen
         PaginationComponent,
         LoaderComponent,
         DetalleCompraComponent,
-        FormaPagoComponent
+        FormaPagoComponent,
+        DetalleVentaComponent
     ]
 })
 

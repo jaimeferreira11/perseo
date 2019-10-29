@@ -18,7 +18,7 @@
                             <div class="form-group">
                                 <div class="col-lg-8">
                                     <h3 class=""><strong>Total a Pagar</strong> </h3>
-                                    <h3 class="form-control total " style="margin-top: -5px;" disabled>{{total | number}} </h3>
+                                    <h3 class="form-control total " style="margin-top: -5px;" disabled>{{total | number:'1.0-0'}} </h3>
                                 </div>
                             </div>
 
@@ -31,7 +31,7 @@
                             <div class="form-group">
                                 <div class="col-lg-8">
                                     <h3 class=""><strong>Vuelto</strong> </h3>
-                                    <h3 class="form-control total " style="margin-top: -5px;" disabled>{{vuelto | number}} </h3>
+                                    <h3 class="form-control total " style="margin-top: -5px;" disabled>{{vuelto | number:'1.0-0'}} </h3>
                                 </div>
                             </div>
 
@@ -63,7 +63,7 @@
 
                                 <div class="col-lg-3">
                                     <label class="">Saldo</label>
-                                    <h3 class="form-control total " style="font-size: 18px;" disabled>{{saldo | number }}</h3>
+                                    <h3 class="form-control total " style="font-size: 18px;" disabled>{{saldo | number:'1.0-0' }}</h3>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-primary m-t-md" [ngClass]="{'disabled': forma.cajaCuenta.tipo !== 'E' && !forma.transaccion}" [disabled]="!forma.importe" (click)="agregar()"> <i class="fa fa-plus"></i> Agregar</button>
@@ -92,7 +92,7 @@
                         </div>
                     </div>
 
-                    <div class="row" *ngIf="tipo === 'cobro'">
+                    <div class="row" *ngIf="tipo !== 'pago'">
 
                         <div class="col-lg-12">
 
@@ -177,7 +177,7 @@
                         </div>
                     </div>
 
-                    <div class="row" *ngIf="tipo === 'cobro'">
+                    <div class="row" *ngIf="tipo !== 'pago'">
                         <div class="table-responsive">
 
                             <table class="table table-bordered ">

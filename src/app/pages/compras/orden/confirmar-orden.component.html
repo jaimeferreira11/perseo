@@ -79,8 +79,8 @@
                                             <td>{{item.beneficiario}}</td>
                                             <td>{{item.concepto}}</td>
                                             <td>{{item.usuario?.login}}</td>
-                                            <td class="bold">{{item.importeRetenido | number}}</td>
-                                            <td class="bold">{{item.importe | number}}</td>
+                                            <td class="bold">{{item.importeRetenido | number:'1.0-0'}}</td>
+                                            <td class="bold">{{item.importe | number:'1.0-0'}}</td>
                                             <td class="text-center">
                                                 <a data-toggle="modal" href="#modal_detalle_compra" (click)="modalDetalles= item.compras;" class="btn btn-success"> <i class="fa fa-eye"> </i> </a>
                                             </td>

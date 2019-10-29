@@ -45,7 +45,8 @@ export class FacturaCab {
         public exenta?: number,
         public empresa?: Empresa,
         public detalleFactura: FacturaDet[] = [],
-        public listFormaPago: FacturaFormaCobro[] = []
+        public listFormaPago: FacturaFormaCobro[] = [],
+        public aPagar?: number | any,
     ) { }
 
 }
