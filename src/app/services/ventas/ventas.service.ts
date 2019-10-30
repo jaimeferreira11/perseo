@@ -4,6 +4,8 @@ import { VentaCab } from 'src/app/models/venta-cab.model';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { ReciboCab } from '../../models/recibo-cab.model';
+import { Factura } from 'src/app/models/factura.model';
+import { Recibo } from 'src/app/models/recibo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -117,4 +119,54 @@ export class VentasService {
       }));
   }
 
+
+  // talonario factura
+  getTalonarioFacturaByEmpresa(idEmpresa: number, all: boolean, estado: boolean) {
+
+    let url = `${environment.API}${environment.ROOT}/facturas/factura/${idEmpresa}/${all}/${estado}`;
+
+    return this.http.get( url)
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+  }
+
+  saveTalonarioFactura(factura: Factura) {
+
+    let url = environment.API + environment.ROOT + '/facturas/factura';
+
+    return this.http.post( url , factura)
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+  }
+
+   // talonario recibos
+   getTalonarioReciboByEmpresa(idEmpresa: number, all: boolean, estado: boolean) {
+
+    let url = `${environment.API}${environment.ROOT}/facturas/recibo/${idEmpresa}/${all}/${estado}`;
+
+    return this.http.get( url)
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+  }
+
+  saveTalonarioRecibo(recibo: Recibo) {
+
+    let url = environment.API + environment.ROOT + '/facturas/recibo';
+
+    return this.http.post( url , recibo)
+      .pipe(
+        map ((resp: any ) => {
+          console.log(resp);
+          return resp;
+      }));
+  }
 }

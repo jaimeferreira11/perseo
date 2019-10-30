@@ -24,6 +24,10 @@ import { ConfirmarOrdenComponent } from './compras/orden/confirmar-orden.compone
 import { ProveedoresComponent } from './mantenimientos/proveedores/proveedores.component';
 import { RegistrarVentaComponent } from './ventas/registrar-venta.component';
 import { CobrarFacturaComponent } from './ventas/cobrar-factura.component';
+import { CajaComponent } from './mantenimientos/caja/caja.component';
+import { CajaCuentaComponent } from './mantenimientos/caja-cuenta/caja-cuenta.component';
+import { FacturaComponent } from './mantenimientos/factura/factura.component';
+import { ReciboComponent } from './mantenimientos/recibo/recibo.component';
 
 
 const pagesRoutes: Routes = [
@@ -46,6 +50,12 @@ const pagesRoutes: Routes = [
     { path: 'mant-marca', component: MarcaComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-linea-articulo', component: LineaArticuloComponent , canActivate: [SessionGuard, LoginGuard] },
     { path: 'mant-unidad-medida', component: UnidadMedidaComponent , canActivate: [SessionGuard, LoginGuard] },
+
+    // tesoreria
+    { path: 'mant-cajas', component: CajaComponent , canActivate: [SessionGuard, LoginGuard] },
+    { path: 'mant-caja-cuentas', component: CajaCuentaComponent , canActivate: [SessionGuard, LoginGuard] },
+    { path: 'mant-facturas', component: FacturaComponent , canActivate: [SessionGuard, LoginGuard] },
+    { path: 'mant-recibos', component: ReciboComponent , canActivate: [SessionGuard, LoginGuard] },
 
     // personas
     { path: 'mant-clientes', component: ClientesComponent , canActivate: [SessionGuard, LoginGuard] },

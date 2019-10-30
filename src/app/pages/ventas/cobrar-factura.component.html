@@ -40,13 +40,23 @@
 
     <div class="col-lg-4">
         <div class="ibox float-e-margins">
+
             <div class="ibox-content">
-                <div class="row">
+                <div class="row m-t-md m-b-sm">
                     <div class="col-lg-5">
                         <h3 class="pull-right"><strong>Total a Pagar</strong> </h3>
                     </div>
                     <div class="col-lg-7">
                         <h3 class="form-control total " style="margin-top: -5px;" disabled>{{recibo.importe | number:'1.0-0' }}</h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-5">
+                        <h3 class="pull-right"><strong>Cantidad</strong> </h3>
+                    </div>
+                    <div class="col-lg-7">
+                        <h3 class="form-control total " style="margin-top: -5px;" disabled>{{facturasSeleccionados.length| number:'1.0-0' }}</h3>
                     </div>
                 </div>
 
