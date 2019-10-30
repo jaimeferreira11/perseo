@@ -31,6 +31,10 @@ import { RegistrarOrdenComponent } from './compras/orden/registrar-orden.compone
 import { ConfirmarOrdenComponent } from './compras/orden/confirmar-orden.component';
 import { RegistrarVentaComponent } from './ventas/registrar-venta.component';
 import { CobrarFacturaComponent } from './ventas/cobrar-factura.component';
+import { CajaComponent } from './mantenimientos/caja/caja.component';
+import { CajaCuentaComponent } from './mantenimientos/caja-cuenta/caja-cuenta.component';
+import { ReciboComponent } from './mantenimientos/recibo/recibo.component';
+import { FacturaComponent } from './mantenimientos/factura/factura.component';
 
 
 
@@ -57,7 +61,11 @@ import { CobrarFacturaComponent } from './ventas/cobrar-factura.component';
         RegistrarOrdenComponent,
         ConfirmarOrdenComponent,
         RegistrarVentaComponent,
-        CobrarFacturaComponent
+        CobrarFacturaComponent,
+        CajaComponent,
+        CajaCuentaComponent,
+        ReciboComponent,
+        FacturaComponent
     ],
     exports: [
        HomeComponent

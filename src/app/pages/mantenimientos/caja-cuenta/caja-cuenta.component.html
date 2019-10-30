@@ -1,0 +1,201 @@
+<div class="row">
+
+    <div class="col-md-5">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="text-navy"> Agregar/Modificar</h5>
+
+            </div>
+            <div class="ibox-content">
+
+                <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="grabar( f )">
+
+                    <div class="row text-center m-b-md">
+                        <div class="col-md">
+                            <button type="submit" class="btn btn-w-m btn-outline btn-success" [disabled]="!cajaCuenta"><i class="fa fa-check"></i> Grabar</button> &nbsp;
+                            <button type="button" class="btn btn-w-m btn-outline btn-danger" (click)="cancelar()"> <i class="fa fa-refresh"></i> Cancelar</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <label class="">ID Caja Cuenta</label>
+                            <input type="text" placeholder="ID " class="form-control" disabled name="idCajaCuenta" [(ngModel)]="cajaCuenta.idCajaCuenta" />
+
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label class="">Numero</label>
+                            <input type="text" placeholder="Numero" class="form-control" [disabled]="!caja" name="numero" [(ngModel)]="cajaCuenta.numero" />
+
+                        </div>
+
+                        <div class="col-lg-3">
+
+                            <label class="">Estado</label>
+                            <label class="container">
+                                <span *ngIf="cajaCuenta.estado">ACTIVO</span><span *ngIf="!cajaCuenta.estado">INACTIVO</span>
+                                <input name="estado" [(ngModel)]="cajaCuenta.estado" type="checkbox" class=""> 
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <label class="">Descripcion</label>
+
+                            <input type="text" [disabled]="!caja" name="descripcion" oninput="this.value = this.value.toUpperCase()" [(ngModel)]="cajaCuenta.descripcion" placeholder="Descripcion cuenta" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="">Tipo </label>
+                            <select class="form-control" name="tipo" [(ngModel)]="cajaCuenta.tipo">
+                                            <option value="E">EFECTIVO</option>    
+                                            <option value="B">BANCO</option> 
+                                            <option value="C">CHEQUE</option>                                            
+                                        </select>
+
+                        </div>
+                        <div class="col-lg-6" *ngIf="cajaCuenta.tipo === 'B'">
+                            <label class="">Banco </label>
+                            <select class="form-control" name="idBanco" [(ngModel)]="cajaCuenta.banco.idBanco">
+                                    <option *ngFor="let item of bancos" [value]="item.idBanco">
+                                            {{item.descripcion}}
+                                     </option>                                               
+                                </select>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <label class="">Caja</label>
+
+                            <input type="text" disabled [value]="caja?.descripcion" oninput="this.value = this.value.toUpperCase()" placeholder="Caja" class="form-control" required />
+                        </div>
+                    </div>
+
+
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-md-7">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h5 class="text-navy " style="margin-top: 5px!important;"> Listado de Cuentas</h5>
+                    </div>
+
+                    <div class="col-lg-4" *ngIf="_usuarioService.esRoot()">
+                        <label class="m-r-lg">Empresa  </label>
+                        <select id="selectEmpresa" class="select2 form-control">
+                                       <option value="null" disabled>Seleccione la Empresa</option>
+                                         <option *ngFor="let item of empresas" [value]="item.idEmpresa">{{item.descripcion}}</option>
+                                 </select>
+                    </div>
+
+
+                    <div class="col-lg-4">
+                        <label class="m-r-lg">Caja  </label>
+                        <select id="selectCaja" data-placeholder="Seleccione la caja" class="select2 form-control" [disabled]="!empresa">
+                                       
+                                         <option *ngFor="let item of cajas" [value]="item.idCaja">{{item.descripcion}}</option>
+                                 </select>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="ibox-content" *ngIf="caja">
+
+                <div class="row">
+                    <div class="col-lg-12 form-inline">
+                        Buscar
+                        <input class="form-control ml-2" type="text" #input (keyup)="search(input.value)" />
+
+                        <div class="pull-right justify-content-end">
+                            Mostrar
+                            <select class="form-control ml-2 " style="width: auto" [(ngModel)]="pageSize">
+                                                                    <option [ngValue]="5">5 items</option>
+                                                                    <option [ngValue]="10">10 items</option>
+                                                                    <option [ngValue]="20">20 items</option>
+                                                                  </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="table-responsive">
+                    <table class="table table-bordered " id="tabla">
+                        <thead class="thead-primary">
+
+                            <tr>
+                                <th>Numero</th>
+                                <th>Descripción</th>
+                                <th>Tipo</th>
+                                <th>Banco</th>
+                                <th>Estado</th>
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="lista.length> 0">
+                            <tr *ngFor="let item of listaFiltrada | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index; " (click)="seleccionar(item)" [ngClass]="{'row-selected': cajaCuenta.idCajaCuenta === item.idCajaCuenta}">
+                                <td>{{item.numero}}</td>
+                                <td>{{item.descripcion}}</td>
+                                <td *ngIf="item.tipo === 'E'">EFECTIVO</td>
+                                <td *ngIf="item.tipo === 'B'">BANCO</td>
+                                <td *ngIf="item.tipo === 'C'">CHEQUE</td>
+                                <td>{{item.banco?.descripcion}}</td>
+                                <td *ngIf="item.estado"><span class="badge badge-success"> ACTIVO</span></td>
+                                <td *ngIf="!item.estado"><span class="badge badge-danger"> INACTIVO</span></td>
+
+                            </tr>
+
+                        </tbody>
+                        <tbody *ngIf="lista.length === 0">
+                            <tr>
+                                <td colspan="4" class="no-data-available text-center">No existen datos para mostrar</td>
+                            </tr>
+                        </tbody>
+
+                        <tbody *ngIf="listaFiltrada.length === 0 && lista.length > 0">
+                            <tr>
+                                <td colspan="5" class="no-data-available text-center">
+                                    <div class="alert alert-warning text-center" *ngIf="listaFiltrada.length === 0 && lista.length > 0">
+                                        <span> <i class="fa fa-info-circle"></i> No se encontro resultados</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tbody>
+                    </table>
+                    <span *ngIf="lista.length < page * pageSize">
+                                Mostrando {{listaFiltrada.length}} registro(s) de {{listaFiltrada.length}}
+                            </span>
+                    <span *ngIf="lista.length >= page * pageSize">
+                                    Mostrando {{page * pageSize }} registro(s) de {{listaFiltrada.length}}
+                                </span>
+
+                    <div class="text-center">
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="false">
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

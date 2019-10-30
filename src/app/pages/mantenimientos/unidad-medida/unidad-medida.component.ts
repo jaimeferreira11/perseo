@@ -19,7 +19,7 @@ export class UnidadMedidaComponent implements OnInit {
   lista: UnidadMedida[] = [];
 
   empresa: Empresa;
-  empresas: Empresa[] = []
+  empresas: Empresa[] = [];
 
 
   // tabla Paginacion

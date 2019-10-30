@@ -19,7 +19,7 @@ export class MarcaComponent implements OnInit {
   lista: Marca[] = [];
 
   empresa: Empresa;
-  empresas: Empresa[] = []
+  empresas: Empresa[] = [];
 
 
   // tabla Paginacion
